@@ -1,6 +1,5 @@
 package be.chesteric31.athena.draco.web.rest
 
-import be.chesteric31.athena.draco.DracoApplication
 import be.chesteric31.athena.draco.domain.Foto
 import be.chesteric31.athena.draco.domain.FotoRepository
 import org.bson.types.Binary
