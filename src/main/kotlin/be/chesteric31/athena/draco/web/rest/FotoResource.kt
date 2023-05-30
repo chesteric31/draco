@@ -8,6 +8,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
+import java.time.LocalDate
 
 
 @CrossOrigin(origins = ["*"], maxAge = 3600)
@@ -17,9 +18,8 @@ class FotoResource(private val repository: FotoRepository, private val rabbitTem
 
     @PostMapping("/")
     fun receiveFoto(@RequestParam(name = "type") type: String, @RequestParam(name = "file") file: MultipartFile) {
-        var entity = Foto(null, type, Binary(file.bytes))
+        var entity = Foto(null, type, Binary(file.bytes),  LocalDate.now(), null)
         entity = repository.save(entity)
-        println(type)
         rabbitTemplate.convertAndSend("topic.fotos", "route", entity.id!!)
     }
 
@@ -29,4 +29,11 @@ class FotoResource(private val repository: FotoRepository, private val rabbitTem
         return repository.findByIdOrNull(id)?.image?.data
     }
 
+    @PostMapping("/{id}")
+    fun receiveIndex(@PathVariable id: String, @RequestParam(name = "index") index: Long): Foto {
+        val found = repository.findByIdOrNull(id)
+        found?.index = index
+        println("${id} - ${index}")
+        return repository.save(found!!)
+    }
 }
