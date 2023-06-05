@@ -20,7 +20,7 @@ class FotoResource(private val repository: FotoRepository, private val rabbitTem
     fun receiveFoto(@RequestParam(name = "type") type: String, @RequestParam(name = "file") file: MultipartFile) {
         var entity = Foto(null, type, Binary(file.bytes),  LocalDate.now(), null)
         entity = repository.save(entity)
-        rabbitTemplate.convertAndSend("topic.fotos", "route", entity.id!!)
+        rabbitTemplate.convertAndSend("topic.fotos", "route_in", entity.id!!)
     }
 
     @GetMapping("/{id}", produces = [MediaType.IMAGE_PNG_VALUE])
