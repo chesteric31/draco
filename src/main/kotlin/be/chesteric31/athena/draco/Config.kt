@@ -1,5 +1,6 @@
 package be.chesteric31.athena.draco
 
+import com.fasterxml.jackson.core.json.JsonReadFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import org.springframework.amqp.core.Binding
@@ -62,6 +63,7 @@ class Config {
     @Bean
     fun objectMapper(): ObjectMapper {
         val objectMapper = ObjectMapper()
+        objectMapper.enable(JsonReadFeature.ALLOW_LEADING_ZEROS_FOR_NUMBERS.mappedFeature())
         objectMapper.registerModule(kotlinModule())
         return objectMapper
     }
